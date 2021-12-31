@@ -1,0 +1,7 @@
+{
+  "name": "workmail-interface",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}
