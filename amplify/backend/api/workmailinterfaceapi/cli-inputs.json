@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "paths": {
+    "/aliases": {
+      "name": "/aliases",
+      "lambdaFunction": "workmailinterface3ad13b96",
+      "permissions": {
+        "setting": "private",
+        "auth": [
+          "create",
+          "read",
+          "update",
+          "delete"
+        ]
+      }
+    }
+  }
+}

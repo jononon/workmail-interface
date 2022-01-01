@@ -1,0 +1,27 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-workmailinterface-dev-190315-authRole",
+      "UnauthRoleArn": "arn:aws:iam::803061835180:role/amplify-workmailinterface-dev-190315-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::803061835180:role/amplify-workmailinterface-dev-190315-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-workmailinterface-dev-190315-deployment",
+      "UnauthRoleName": "amplify-workmailinterface-dev-190315-unauthRole",
+      "StackName": "amplify-workmailinterface-dev-190315",
+      "StackId": "arn:aws:cloudformation:us-east-1:803061835180:stack/amplify-workmailinterface-dev-190315/d37d35d0-69dd-11ec-a548-0af68f6f42fd",
+      "AmplifyAppId": "d3alh3cheut8i0",
+      "APIGatewayAuthURL": "https://s3.amazonaws.com/amplify-workmailinterface-dev-190315-deployment/amplify-cfn-templates/api/APIGatewayAuthStack.json"
+    },
+    "categories": {
+      "auth": {
+        "workmailinterface36a6228a": {}
+      },
+      "function": {
+        "workmailinterface3ad13b96": {
+          "deploymentBucketName": "amplify-workmailinterface-dev-190315-deployment",
+          "s3Key": "amplify-builds/workmailinterface3ad13b96-6e666d4d546745537166-build.zip"
+        }
+      }
+    }
+  }
+}
