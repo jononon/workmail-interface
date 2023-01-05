@@ -21,6 +21,8 @@
     "@types/react-router": "^5.1.11",
     "@types/react-router-dom": "^5.1.7",
     "aws-amplify": "4.3.11",
+    "deepmerge": "4.2.2",
+    "formik": "2.2.9",
     "ionicons": "^5.4.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
@@ -40,7 +42,8 @@
     "workbox-range-requests": "^5.1.4",
     "workbox-routing": "^5.1.4",
     "workbox-strategies": "^5.1.4",
-    "workbox-streams": "^5.1.4"
+    "workbox-streams": "^5.1.4",
+    "zustand": "3.6.8"
   },
   "scripts": {
     "start": "react-scripts start",

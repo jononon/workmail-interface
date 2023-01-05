@@ -19,7 +19,7 @@
       "function": {
         "workmailinterface3ad13b96": {
           "deploymentBucketName": "amplify-workmailinterface-dev-190315-deployment",
-          "s3Key": "amplify-builds/workmailinterface3ad13b96-6e666d4d546745537166-build.zip"
+          "s3Key": "amplify-builds/workmailinterface3ad13b96-3758502f514a2f2b4174-build.zip"
         }
       }
     }
