@@ -29,7 +29,7 @@ const IonInputWrapper = ({
   form,
   ...props
 }: FieldProps & { label: string }) => (
-  <IonItem className="item ion-no-padding" lines="none">
+  <IonItem>
     <IonLabel position="stacked">{props.label}</IonLabel>
     <IonInput
       mode="ios"
