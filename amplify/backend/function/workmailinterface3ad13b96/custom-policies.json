@@ -1,6 +1,13 @@
 [
   {
-    "Action": [],
-    "Resource": []
+    "Action": [
+      "workmail:CreateAlias",
+      "workmail:ListGroups",
+      "workmail:CreateGroup",
+      "workmail:AssociateMemberToGroup"
+    ],
+    "Resource": [
+      "arn:aws:workmail:us-east-1:803061835180:organization/m-04a672b08206471da6a6a4751043a105"
+    ]
   }
 ]
