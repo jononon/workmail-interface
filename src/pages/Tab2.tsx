@@ -50,15 +50,19 @@ const Tab2: React.FC = () => {
       <IonContent fullscreen>
         <IonHeader collapse="condense">
           <IonToolbar>
-            <IonTitle size="large">Tab 2</IonTitle>
+            <IonTitle size="large">Create New Alias</IonTitle>
           </IonToolbar>
         </IonHeader>
-        <ExploreContainer name="Tab 2 page" />
         <Formik
           initialValues={{ aliasName: "", accountType: "" }}
           onSubmit={(values) => {
             console.log(values);
-            API.post("workmailinterfaceapi", "/aliases", { body: values });
+            API.post("workmailinterfaceapi", "/aliases", {
+              body: {
+                aliasName: `${values.accountType}-${values.aliasName}`,
+                email: `${values.aliasName.toLowerCase()}.${values.accountType.toLowerCase()}@jonathandamico.me`,
+              },
+            });
           }}
           validate={(values) => {
             const errors: any = {};
@@ -73,14 +77,14 @@ const Tab2: React.FC = () => {
         >
           {({ values, handleChange, handleSubmit }) => (
             <form onSubmit={handleSubmit}>
-              <Field
-                name="aliasName"
-                label="Alias Name"
-                type="text"
-                component={IonInputWrapper}
-              />
-
               <IonList>
+                <Field
+                  name="aliasName"
+                  label="Alias Name"
+                  type="text"
+                  component={IonInputWrapper}
+                />
+
                 <IonRadioGroup
                   value={values.accountType}
                   onIonChange={(e) => (values.accountType = e.detail.value)}
@@ -91,20 +95,32 @@ const Tab2: React.FC = () => {
 
                   <IonItem>
                     <IonLabel>Account</IonLabel>
-                    <IonRadio slot="start" value="account" />
+                    <IonRadio slot="start" value="Accounts" />
                   </IonItem>
 
                   <IonItem>
                     <IonLabel>Orders</IonLabel>
-                    <IonRadio slot="start" value="orders" />
+                    <IonRadio slot="start" value="Orders" />
                   </IonItem>
 
                   <IonItem>
-                    <IonLabel>Other</IonLabel>
-                    <IonRadio slot="start" value="other" />
+                    <IonLabel>None</IonLabel>
+                    <IonRadio slot="start" value="" />
                   </IonItem>
                 </IonRadioGroup>
               </IonList>
+
+              <IonItem>
+                <IonLabel>
+                  Alias Name: {`${values.accountType}-${values.aliasName}`}
+                </IonLabel>
+              </IonItem>
+              <IonItem>
+                <IonLabel>
+                  Email:{" "}
+                  {`${values.aliasName.toLowerCase()}.${values.accountType.toLowerCase()}@jonathandamico.me`}
+                </IonLabel>
+              </IonItem>
 
               <IonButton type="submit">Submit</IonButton>
               {/* <button type="submit">Submit</button> */}
