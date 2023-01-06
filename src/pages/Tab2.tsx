@@ -39,6 +39,35 @@ const IonInputWrapper = ({
   </IonItem>
 );
 
+const IonRadioWrapper = ({
+  field,
+  form,
+  ...props
+}: FieldProps & { label: string }) => (
+  <IonRadioGroup
+    onIonChange={(e) => form.setFieldValue("accountType", e.detail.value)}
+  >
+    <IonListHeader>
+      <IonLabel>{props.label}</IonLabel>
+    </IonListHeader>
+
+    <IonItem>
+      <IonLabel>Account</IonLabel>
+      <IonRadio slot="start" value="Accounts" />
+    </IonItem>
+
+    <IonItem>
+      <IonLabel>Orders</IonLabel>
+      <IonRadio slot="start" value="Orders" />
+    </IonItem>
+
+    <IonItem>
+      <IonLabel>None</IonLabel>
+      <IonRadio slot="start" value="" />
+    </IonItem>
+  </IonRadioGroup>
+);
+
 const Tab2: React.FC = () => {
   return (
     <IonPage>
@@ -85,44 +114,26 @@ const Tab2: React.FC = () => {
                   component={IonInputWrapper}
                 />
 
-                <IonRadioGroup
-                  value={values.accountType}
-                  onIonChange={(e) => (values.accountType = e.detail.value)}
-                >
-                  <IonListHeader>
-                    <IonLabel>Name</IonLabel>
-                  </IonListHeader>
+                <Field
+                  name="accountType"
+                  label="Account Type"
+                  component={IonRadioWrapper}
+                />
 
-                  <IonItem>
-                    <IonLabel>Account</IonLabel>
-                    <IonRadio slot="start" value="Accounts" />
-                  </IonItem>
+                <IonItem>
+                  <IonLabel>
+                    Alias Name: {`${values.accountType}-${values.aliasName}`}
+                  </IonLabel>
+                </IonItem>
+                <IonItem>
+                  <IonLabel>
+                    Email:{" "}
+                    {`${values.aliasName.toLowerCase()}.${values.accountType.toLowerCase()}@jonathandamico.me`}
+                  </IonLabel>
+                </IonItem>
 
-                  <IonItem>
-                    <IonLabel>Orders</IonLabel>
-                    <IonRadio slot="start" value="Orders" />
-                  </IonItem>
-
-                  <IonItem>
-                    <IonLabel>None</IonLabel>
-                    <IonRadio slot="start" value="" />
-                  </IonItem>
-                </IonRadioGroup>
+                <IonButton type="submit">Submit</IonButton>
               </IonList>
-
-              <IonItem>
-                <IonLabel>
-                  Alias Name: {`${values.accountType}-${values.aliasName}`}
-                </IonLabel>
-              </IonItem>
-              <IonItem>
-                <IonLabel>
-                  Email:{" "}
-                  {`${values.aliasName.toLowerCase()}.${values.accountType.toLowerCase()}@jonathandamico.me`}
-                </IonLabel>
-              </IonItem>
-
-              <IonButton type="submit">Submit</IonButton>
               {/* <button type="submit">Submit</button> */}
             </form>
           )}
