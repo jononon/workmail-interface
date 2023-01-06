@@ -1,4 +1,4 @@
-const { WorkMailClient, ListGroupsCommand, CreateGroupCommand, CreateAliasCommand, AssociateMemberToGroupCommand } = require("@aws-sdk/client-workmail"); 
+const { WorkMailClient, ListGroupsCommand, CreateGroupCommand, UpdatePrimaryEmailAddressCommand, AssociateMemberToGroupCommand, NameAvailabilityException } = require("@aws-sdk/client-workmail"); 
 
 exports.handler = async (event) => {
 
@@ -38,16 +38,34 @@ exports.handler = async (event) => {
                 Name: eventBody.aliasName,
             });
             
-            const createGroupResponse = await client.send(createGroupCommand);
+            let createGroupResponse;
+            try {    
+                createGroupResponse = await client.send(createGroupCommand);
+            } catch (e) {
+                if (e instanceof NameAvailabilityException) {
+                    return {
+                        statusCode: 400,
+                        headers: {
+                            "Access-Control-Allow-Origin": "*",
+                            "Access-Control-Allow-Headers": "*"
+                        }, 
+                        body: JSON.stringify({
+                            message: "Name is already taken",
+                        }),
+                    };
+                } else {
+                    throw e;
+                }
+            }
 
-
-            const createAliasCommand = new CreateAliasCommand({
+            const updatePrimaryEmailAddressCommand = new UpdatePrimaryEmailAddressCommand({
                 OrganizationId: "m-04a672b08206471da6a6a4751043a105",
                 EntityId: createGroupResponse.GroupId,
-                Alias: eventBody.email,
+                Email: eventBody.email,
             });
 
-            const createAliasResponse = await client.send(createAliasCommand);
+            const updatePrimaryEmailAddressResponse = await client.send(updatePrimaryEmailAddressCommand);
+
 
             const associateMemberToGroupCommand = new AssociateMemberToGroupCommand({
                 OrganizationId: "m-04a672b08206471da6a6a4751043a105",
@@ -67,7 +85,7 @@ exports.handler = async (event) => {
             }, 
                 body: JSON.stringify({
                     "createGroupResponse": createGroupResponse, 
-                    "createAliasResponse": createAliasResponse, 
+                    "updatePrimaryEmailAddressResponse": updatePrimaryEmailAddressResponse, 
                     "associateMemberToGroupResponse": associateMemberToGroupResponse,
                 }),
             };
