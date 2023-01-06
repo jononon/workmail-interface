@@ -1,4 +1,4 @@
-const { WorkMailClient, ListGroupsCommand, CreateGroupCommand, UpdatePrimaryEmailAddressCommand, AssociateMemberToGroupCommand, NameAvailabilityException } = require("@aws-sdk/client-workmail"); 
+const { WorkMailClient, ListGroupsCommand, CreateGroupCommand, RegisterToWorkMailCommand, AssociateMemberToGroupCommand, NameAvailabilityException } = require("@aws-sdk/client-workmail"); 
 
 exports.handler = async (event) => {
 
@@ -58,13 +58,13 @@ exports.handler = async (event) => {
                 }
             }
 
-            const updatePrimaryEmailAddressCommand = new UpdatePrimaryEmailAddressCommand({
+            const registerToWorkMailCommand = new RegisterToWorkMailCommand({
                 OrganizationId: "m-04a672b08206471da6a6a4751043a105",
                 EntityId: createGroupResponse.GroupId,
                 Email: eventBody.email,
             });
 
-            const updatePrimaryEmailAddressResponse = await client.send(updatePrimaryEmailAddressCommand);
+            const registerToWorkMailResponse = await client.send(registerToWorkMailCommand);
 
 
             const associateMemberToGroupCommand = new AssociateMemberToGroupCommand({
@@ -85,7 +85,7 @@ exports.handler = async (event) => {
             }, 
                 body: JSON.stringify({
                     "createGroupResponse": createGroupResponse, 
-                    "updatePrimaryEmailAddressResponse": updatePrimaryEmailAddressResponse, 
+                    "registerToWorkMailResponse": registerToWorkMailResponse, 
                     "associateMemberToGroupResponse": associateMemberToGroupResponse,
                 }),
             };
