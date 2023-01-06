@@ -31,9 +31,11 @@ exports.handler = async (event) => {
             return response;
         }
         case "POST": {
+            const eventBody = JSON.parse(event.body);
+
             const createGroupCommand = new CreateGroupCommand({
                 OrganizationId: "m-04a672b08206471da6a6a4751043a105",
-                Name: event.body.aliasName,
+                Name: eventBody.aliasName,
             });
             
             const createGroupResponse = await client.send(createGroupCommand);
@@ -42,7 +44,7 @@ exports.handler = async (event) => {
             const createAliasCommand = new CreateAliasCommand({
                 OrganizationId: "m-04a672b08206471da6a6a4751043a105",
                 EntityId: createGroupResponse.GroupId,
-                Alias: event.body.email,
+                Alias: eventBody.email,
             });
 
             const createAliasResponse = await client.send(createAliasCommand);
