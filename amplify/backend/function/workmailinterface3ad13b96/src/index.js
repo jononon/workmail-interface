@@ -1,4 +1,4 @@
-const { WorkMailClient, ListGroupsCommand, CreateGroupCommand, RegisterToWorkMailCommand, AssociateMemberToGroupCommand, NameAvailabilityException } = require("@aws-sdk/client-workmail"); 
+const { WorkMailClient, ListGroupsCommand, CreateGroupCommand, RegisterToWorkMailCommand, AssociateMemberToGroupCommand, PutMailboxPermissionsCommand, NameAvailabilityException } = require("@aws-sdk/client-workmail"); 
 
 exports.handler = async (event) => {
 
@@ -75,6 +75,15 @@ exports.handler = async (event) => {
 
             const associateMemberToGroupResponse = await client.send(associateMemberToGroupCommand);
 
+            const putMailboxPermissionsCommand = new PutMailboxPermissionsCommand({
+                OrganizationId: "m-04a672b08206471da6a6a4751043a105",
+                EntityId: createGroupResponse.GroupId,
+                GranteeId: "6618dd9f-e6d9-42b6-b481-994937a32831",
+                PermissionValues: ["FULL_ACCESS"],
+            });
+
+            const putMailboxPermissionsResponse = await client.send(putMailboxPermissionsCommand);
+
             // TODO implement
             const response = {
                 statusCode: 200,
@@ -87,6 +96,7 @@ exports.handler = async (event) => {
                     "createGroupResponse": createGroupResponse, 
                     "registerToWorkMailResponse": registerToWorkMailResponse, 
                     "associateMemberToGroupResponse": associateMemberToGroupResponse,
+                    "putMailboxPermissionsResponse": putMailboxPermissionsResponse,
                 }),
             };
             return response; 
