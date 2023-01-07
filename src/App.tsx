@@ -41,7 +41,9 @@ import awsconfig from "./aws-exports";
 
 Amplify.configure(awsconfig);
 
-setupIonicReact();
+setupIonicReact({
+  mode: "ios",
+});
 
 const App: React.FC = () => (
   <IonApp>
