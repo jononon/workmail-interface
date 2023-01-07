@@ -79,7 +79,7 @@ exports.handler = async (event) => {
                 OrganizationId: "m-04a672b08206471da6a6a4751043a105",
                 EntityId: createGroupResponse.GroupId,
                 GranteeId: "6618dd9f-e6d9-42b6-b481-994937a32831",
-                PermissionValues: ["FULL_ACCESS"],
+                PermissionValues: ["SEND_AS"],
             });
 
             const putMailboxPermissionsResponse = await client.send(putMailboxPermissionsCommand);
