@@ -10,5 +10,13 @@
     "Resource": [
       "arn:aws:workmail:us-east-1:803061835180:organization/m-04a672b08206471da6a6a4751043a105"
     ]
+  },
+  {
+    "Action": [
+      "ses:GetIdentityVerificationAttributes"
+    ],
+    "Resource": [
+      "arn:aws:ses:us-east-1:803061835180:identity/jonathandamico.me"
+    ]
   }
 ]
