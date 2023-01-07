@@ -12,11 +12,7 @@
     ]
   },
   {
-    "Action": [
-      "ses:GetIdentityVerificationAttributes"
-    ],
-    "Resource": [
-      "arn:aws:ses:us-east-1:803061835180:identity/jonathandamico.me"
-    ]
+    "Action": ["ses:GetIdentityVerificationAttributes"],
+    "Resource": ["*"]
   }
 ]
