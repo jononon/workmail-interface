@@ -29,14 +29,18 @@ const IonInputWrapper = ({
   form,
   ...props
 }: FieldProps & { label: string }) => (
-  <IonItem>
-    <IonLabel position="stacked">{props.label}</IonLabel>
-    <IonInput
-      mode="ios"
-      onIonChange={(e) => form.setFieldValue(field.name, e.detail.value)}
-      {...props}
-    />
-  </IonItem>
+  <>
+    <IonListHeader>
+      <IonLabel>{props.label}</IonLabel>
+    </IonListHeader>
+    <IonItem>
+      <IonInput
+        mode="ios"
+        onIonChange={(e) => form.setFieldValue(field.name, e.detail.value)}
+        {...props}
+      />
+    </IonItem>
+  </>
 );
 
 const IonRadioWrapper = ({
