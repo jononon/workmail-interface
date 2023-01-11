@@ -172,6 +172,7 @@ const Tab2: React.FC = () => {
               }
             } catch (e) {
               console.log(e);
+              presentResponseToast(response.error.message, true);
             }
           }}
           validate={(values) => {
