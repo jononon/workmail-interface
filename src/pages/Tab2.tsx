@@ -13,6 +13,7 @@ import {
   IonRadioGroup,
   IonTitle,
   IonToolbar,
+  useIonToast,
 } from "@ionic/react";
 import ExploreContainer from "../components/ExploreContainer";
 import "./Tab2.css";
@@ -111,6 +112,21 @@ const IonRadioWrapper = ({
 );
 
 const Tab2: React.FC = () => {
+  const [presentToast] = useIonToast();
+  
+  const presentResponseToast = (message: string, isError: boolean) {
+    presentToast({
+      color: isError ? 'danger' : 'success',
+      message: message,
+      buttons: [
+        {
+          text: 'Dismiss',
+          role: 'cancel',
+        }
+      ]
+    })
+  }
+
   return (
     <IonPage>
       <IonHeader>
@@ -126,18 +142,29 @@ const Tab2: React.FC = () => {
         </IonHeader>
         <Formik
           initialValues={{ aliasName: "", accountType: "" }}
-          onSubmit={(values) => {
+          onSubmit={async (values) => {
             console.log(values);
             try {
-              API.post("workmailinterfaceapi", "/aliases", {
-                body: {
-                  aliasName: generateGroupName(
-                    values.aliasName,
-                    values.accountType
-                  ),
-                  email: generateEmail(values.aliasName, values.accountType),
-                },
-              });
+              const response = await API.post(
+                "workmailinterfaceapi",
+                "/aliases",
+                {
+                  body: {
+                    aliasName: generateGroupName(
+                      values.aliasName,
+                      values.accountType
+                    ),
+                    email: generateEmail(values.aliasName, values.accountType),
+                  },
+                }
+              );
+
+              if(response.error === undefined) {
+                navigator.clipboard.writeText(generateEmail(values.aliasName, values.accountType));
+                presentResponseToast('Alias Created Successfully, Copied To Clipboard', false);
+              } else {
+                presentResponseToast(response.error.message, true);
+              }
             } catch (e) {
               console.log(e);
             }

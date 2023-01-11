@@ -101,7 +101,6 @@ const Tab1: React.FC = () => {
                 <IonLabel>
                   <h3>{alias.Name}</h3>
                   <p>
-                    {alias.Email}{" "}
                     <a
                       role="button"
                       onClick={() => {
@@ -109,7 +108,8 @@ const Tab1: React.FC = () => {
                       }}
                     >
                       <IonIcon icon={clipboardOutline}></IonIcon>
-                    </a>
+                    </a>{" "}
+                    {alias.Email}
                   </p>
                 </IonLabel>
                 <IonBadge slot="end" color={colorForState(alias.State)}>
