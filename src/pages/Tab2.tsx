@@ -112,9 +112,10 @@ const IonRadioWrapper = ({
 );
 
 const Tab2: React.FC = () => {
-  const [presentToast] = useIonToast();
+  const [presentToast, dismissToast] = useIonToast();
 
   const presentResponseToast = (message: string, isError: boolean) => {
+    dismissToast();
     presentToast({
       color: isError ? "danger" : "success",
       message: message,
@@ -172,6 +173,7 @@ const Tab2: React.FC = () => {
               }
             } catch (e) {
               console.log(e);
+              console.log(e.response.data.message);
               presentResponseToast("Group already exists", true);
             }
           }}
