@@ -10,7 +10,7 @@ import {
   setupIonicReact,
 } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
-import { ellipse, square, triangle } from "ionicons/icons";
+import { list, add } from "ionicons/icons";
 import Tab1 from "./pages/Tab1";
 import Tab2 from "./pages/Tab2";
 import Tab3 from "./pages/Tab3";
@@ -60,16 +60,16 @@ const App: React.FC = () => (
             <Tab3 />
           </Route>
           <Route exact path="/">
-            <Redirect to="/tab1" />
+            <Redirect to="/list" />
           </Route>
         </IonRouterOutlet>
         <IonTabBar slot="bottom">
-          <IonTabButton tab="tab1" href="/tab1">
-            <IonIcon icon={triangle} />
+          <IonTabButton tab="list" href="/list">
+            <IonIcon icon={list} />
             <IonLabel>All Groups</IonLabel>
           </IonTabButton>
-          <IonTabButton tab="tab2" href="/tab2">
-            <IonIcon icon={ellipse} />
+          <IonTabButton tab="create" href="/create">
+            <IonIcon icon={add} />
             <IonLabel>Create Alias</IonLabel>
           </IonTabButton>
           {/* <IonTabButton tab="tab3" href="/tab3">
