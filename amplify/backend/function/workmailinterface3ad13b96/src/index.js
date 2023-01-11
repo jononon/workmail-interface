@@ -53,6 +53,7 @@ exports.handler = async (event) => {
                         error: e
                     }
                 });
+                break;
             }
 
             const registerToWorkMailCommand = new RegisterToWorkMailCommand({
