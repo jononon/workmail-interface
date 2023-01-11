@@ -119,6 +119,7 @@ const Tab2: React.FC = () => {
     presentToast({
       color: isError ? "danger" : "success",
       message: message,
+      position: "top",
       buttons: [
         {
           text: "Dismiss",
