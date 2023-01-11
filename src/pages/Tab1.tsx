@@ -5,6 +5,7 @@ import {
   IonHeader,
   IonIcon,
   IonItem,
+  IonLabel,
   IonList,
   IonNote,
   IonPage,
@@ -86,25 +87,31 @@ const Tab1: React.FC = () => {
         ></IonSearchbar>
         <IonList>
           {aliases
-            .filter(
-              (alias) =>
-                alias.Name.toLowerCase().includes(filterTerm) ||
-                alias.Email.toLowerCase().includes(filterTerm)
-            )
+            .filter((alias) => {
+              if (alias.Name.toLowerCase().includes(filterTerm)) {
+                return true;
+              } else if (alias.Email !== undefined) {
+                return alias.Email.toLowerCase().includes(filterTerm);
+              } else {
+                return false;
+              }
+            })
             .map((alias, index) => (
               <IonItem key={index}>
-                <h3>{alias.Name}</h3>
-                <p>
-                  {alias.Email}{" "}
-                  <a
-                    role="button"
-                    onClick={() => {
-                      navigator.clipboard.writeText(alias.Email);
-                    }}
-                  >
-                    <IonIcon icon={clipboardOutline}></IonIcon>
-                  </a>
-                </p>
+                <IonLabel>
+                  <h3>{alias.Name}</h3>
+                  <p>
+                    {alias.Email}{" "}
+                    <a
+                      role="button"
+                      onClick={() => {
+                        navigator.clipboard.writeText(alias.Email);
+                      }}
+                    >
+                      <IonIcon icon={clipboardOutline}></IonIcon>
+                    </a>
+                  </p>
+                </IonLabel>
                 <IonBadge slot="end" color={colorForState(alias.State)}>
                   {capsFirstLetter(alias.State)}
                 </IonBadge>
