@@ -113,19 +113,19 @@ const IonRadioWrapper = ({
 
 const Tab2: React.FC = () => {
   const [presentToast] = useIonToast();
-  
-  const presentResponseToast = (message: string, isError: boolean) {
+
+  const presentResponseToast = (message: string, isError: boolean) => {
     presentToast({
-      color: isError ? 'danger' : 'success',
+      color: isError ? "danger" : "success",
       message: message,
       buttons: [
         {
-          text: 'Dismiss',
-          role: 'cancel',
-        }
-      ]
-    })
-  }
+          text: "Dismiss",
+          role: "cancel",
+        },
+      ],
+    });
+  };
 
   return (
     <IonPage>
@@ -159,9 +159,14 @@ const Tab2: React.FC = () => {
                 }
               );
 
-              if(response.error === undefined) {
-                navigator.clipboard.writeText(generateEmail(values.aliasName, values.accountType));
-                presentResponseToast('Alias Created Successfully, Copied To Clipboard', false);
+              if (response.error === undefined) {
+                navigator.clipboard.writeText(
+                  generateEmail(values.aliasName, values.accountType)
+                );
+                presentResponseToast(
+                  "Alias Created Successfully, Copied To Clipboard",
+                  false
+                );
               } else {
                 presentResponseToast(response.error.message, true);
               }
