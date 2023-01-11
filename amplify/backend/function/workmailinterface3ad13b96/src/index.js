@@ -1,4 +1,5 @@
 const { WorkMailClient, ListGroupsCommand, CreateGroupCommand, RegisterToWorkMailCommand, AssociateMemberToGroupCommand, PutMailboxPermissionsCommand, NameAvailabilityException } = require("@aws-sdk/client-workmail"); 
+const { Console } = require("console");
 
 exports.handler = async (event) => {
 
@@ -37,18 +38,21 @@ exports.handler = async (event) => {
             try {    
                 createGroupResponse = await client.send(createGroupCommand);
             } catch (e) {
-                if (e instanceof NameAvailabilityException) {
-                    statusCode = 400;
-                    body = JSON.stringify({
-                        error: {
-                            message: "Name already taken",
-                            stack: e.stack
-                        }
-                    });
-                    break;
-                } else {
-                    throw e;
-                }
+                // if (e instanceof NameAvailabilityException) {
+                    
+                //     break;
+                // } else {
+                //     throw e;
+                // }
+
+                statusCode = 400;
+                body = JSON.stringify({
+                    error: {
+                        message: "Name already taken",
+                        stack: e.stack,
+                        error: e
+                    }
+                });
             }
 
             const registerToWorkMailCommand = new RegisterToWorkMailCommand({
