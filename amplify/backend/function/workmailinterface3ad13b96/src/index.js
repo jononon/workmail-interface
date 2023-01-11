@@ -6,6 +6,9 @@ exports.handler = async (event) => {
 
     const client = new WorkMailClient({region: "us-east-1"});
 
+    let statusCode = 200;
+    let body;
+
     switch(event.httpMethod) {
         case "GET": {
             const groups = [];
@@ -18,17 +21,9 @@ exports.handler = async (event) => {
                 groups.push(...res.Groups);
             } while (res.NextToken !== undefined);
 
-            // TODO implement
-            const response = {
-                statusCode: 200,
-            //  Uncomment below to enable CORS requests
-            headers: {
-                "Access-Control-Allow-Origin": "*",
-                "Access-Control-Allow-Headers": "*"
-            }, 
-                body: JSON.stringify(groups),
-            };
-            return response;
+            body = JSON.stringify(groups);
+
+            break;
         }
         case "POST": {
             const eventBody = JSON.parse(event.body);
@@ -43,7 +38,14 @@ exports.handler = async (event) => {
                 createGroupResponse = await client.send(createGroupCommand);
             } catch (e) {
                 if (e instanceof NameAvailabilityException) {
-                    throw new Error("Name is already taken");
+                    statusCode = 400;
+                    body = JSON.stringify({
+                        error: {
+                            message: "Name already taken",
+                            stack: e.stack
+                        }
+                    });
+                    break;
                 } else {
                     throw e;
                 }
@@ -75,26 +77,28 @@ exports.handler = async (event) => {
 
             const putMailboxPermissionsResponse = await client.send(putMailboxPermissionsCommand);
 
-            // TODO implement
-            const response = {
-                statusCode: 200,
-            //  Uncomment below to enable CORS requests
-            headers: {
-                "Access-Control-Allow-Origin": "*",
-                "Access-Control-Allow-Headers": "*"
-            }, 
-                body: JSON.stringify({
-                    "createGroupResponse": createGroupResponse, 
-                    "registerToWorkMailResponse": registerToWorkMailResponse, 
-                    "associateMemberToGroupResponse": associateMemberToGroupResponse,
-                    "putMailboxPermissionsResponse": putMailboxPermissionsResponse,
-                }),
-            };
-            return response; 
+            body = JSON.stringify({
+                "createGroupResponse": createGroupResponse, 
+                "registerToWorkMailResponse": registerToWorkMailResponse, 
+                "associateMemberToGroupResponse": associateMemberToGroupResponse,
+                "putMailboxPermissionsResponse": putMailboxPermissionsResponse,
+            })
+
+            break;
         }
         default: {
             return null;
         }
     }
+
+    const response = {
+        statusCode: statusCode,
+        headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Headers": "*"
+        }, 
+        body: body,
+    };
+    return response; 
 
 };
