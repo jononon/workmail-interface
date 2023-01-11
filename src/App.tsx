@@ -50,10 +50,10 @@ const App: React.FC = () => (
     <IonReactRouter>
       <IonTabs>
         <IonRouterOutlet>
-          <Route exact path="/tab1">
+          <Route exact path="/list">
             <Tab1 />
           </Route>
-          <Route exact path="/tab2">
+          <Route exact path="/create">
             <Tab2 />
           </Route>
           <Route path="/tab3">
