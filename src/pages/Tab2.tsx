@@ -173,8 +173,10 @@ const Tab2: React.FC = () => {
               }
             } catch (e) {
               console.log(e);
-              console.log(e.response.data.message);
-              presentResponseToast("Group already exists", true);
+              if (e instanceof Error) {
+                console.log(e);
+                presentResponseToast("Group already exists", true);
+              }
             }
           }}
           validate={(values) => {
