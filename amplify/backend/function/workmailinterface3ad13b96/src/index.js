@@ -43,16 +43,7 @@ exports.handler = async (event) => {
                 createGroupResponse = await client.send(createGroupCommand);
             } catch (e) {
                 if (e instanceof NameAvailabilityException) {
-                    return {
-                        statusCode: 400,
-                        headers: {
-                            "Access-Control-Allow-Origin": "*",
-                            "Access-Control-Allow-Headers": "*"
-                        }, 
-                        body: JSON.stringify({
-                            message: "Name is already taken",
-                        }),
-                    };
+                    throw new Error("Name is already taken");
                 } else {
                     throw e;
                 }

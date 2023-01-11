@@ -1,11 +1,14 @@
 import {
+  IonBadge,
   IonButton,
   IonContent,
   IonHeader,
+  IonIcon,
   IonItem,
   IonList,
   IonNote,
   IonPage,
+  IonSearchbar,
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
@@ -14,6 +17,7 @@ import "./Tab1.css";
 import { useEffect, useState } from "react";
 import { AliasInfo } from "../types";
 import { API } from "aws-amplify";
+import { clipboardOutline } from "ionicons/icons";
 
 const colorForState = (state: string) => {
   switch (state) {
@@ -28,8 +32,20 @@ const colorForState = (state: string) => {
   }
 };
 
+const capsFirstLetter = (str: string) => {
+  if (str.length == 0) {
+    return str;
+  } else if (str.length == 1) {
+    return str.toUpperCase();
+  } else if (str.length > 1) {
+    return str.substring(0, 1).toUpperCase() + str.substring(1).toLowerCase();
+  }
+};
+
 const Tab1: React.FC = () => {
   const [aliases, setAliases] = useState<Array<AliasInfo>>([]);
+  const [filterTerm, setFilterTerm] = useState<string>("");
+
   console.log(aliases);
   useEffect(() => {
     // Create an scoped async function in the hook
@@ -49,28 +65,54 @@ const Tab1: React.FC = () => {
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Tab 1</IonTitle>
+          <IonTitle>All Groups</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
         <IonHeader collapse="condense">
           <IonToolbar>
-            <IonTitle size="large">Tab 1</IonTitle>
+            <IonTitle size="large">All Groups</IonTitle>
           </IonToolbar>
         </IonHeader>
-        <ExploreContainer name="Tab 1 page" />
+        <IonSearchbar
+          debounce={1000}
+          onIonChange={(e) => {
+            let query = "";
+            const target = e.target as HTMLIonSearchbarElement;
+            if (target) query = target.value!.toLowerCase();
+
+            setFilterTerm(query);
+          }}
+        ></IonSearchbar>
         <IonList>
-          {aliases.map((alias, index) => (
-            <IonItem key={index}>
-              <IonTitle>{alias.Name}</IonTitle>
-              <IonNote slot="end" color={colorForState(alias.State)}>
-                {alias.State}
-              </IonNote>
-              <IonButton size="small" slot="end">
-                Small
-              </IonButton>
-            </IonItem>
-          ))}
+          {aliases
+            .filter(
+              (alias) =>
+                alias.Name.toLowerCase().includes(filterTerm) ||
+                alias.Email.toLowerCase().includes(filterTerm)
+            )
+            .map((alias, index) => (
+              <IonItem key={index}>
+                <h3>{alias.Name}</h3>
+                <p>
+                  {alias.Email}{" "}
+                  <a
+                    role="button"
+                    onClick={() => {
+                      navigator.clipboard.writeText(alias.Email);
+                    }}
+                  >
+                    <IonIcon icon={clipboardOutline}></IonIcon>
+                  </a>
+                </p>
+                <IonBadge slot="end" color={colorForState(alias.State)}>
+                  {capsFirstLetter(alias.State)}
+                </IonBadge>
+                <IonButton size="small" slot="end">
+                  Small
+                </IonButton>
+              </IonItem>
+            ))}
         </IonList>
       </IonContent>
     </IonPage>
