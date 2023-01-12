@@ -122,7 +122,7 @@ const Tab2: React.FC = () => {
 
     let email = aliasName;
 
-    if (accountType !== "none") {
+    if (accountType !== "none" && accountType !== "") {
       email += `.${accountType}`;
     }
 
