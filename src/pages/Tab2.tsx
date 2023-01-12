@@ -31,7 +31,7 @@ const IonInputWrapper = ({
   ...props
 }: FieldProps & { label: string }) => (
   <>
-    <IonListHeader>
+    <IonListHeader lines="full">
       <IonLabel>{props.label}</IonLabel>
     </IonListHeader>
     <IonItem>
@@ -52,7 +52,7 @@ const IonRadioWrapper = ({
   <IonRadioGroup
     onIonChange={(e) => form.setFieldValue("accountType", e.detail.value)}
   >
-    <IonListHeader>
+    <IonListHeader lines="full">
       <IonLabel>{props.label}</IonLabel>
     </IonListHeader>
 
@@ -83,18 +83,15 @@ const IonCheckboxWrapper = ({
   form,
   ...props
 }: FieldProps & { label: string }) => (
-  <>
-    <IonListHeader>
-      <IonLabel>{props.label}</IonLabel>
-    </IonListHeader>
-    <IonItem>
-      <IonCheckbox
-        mode="ios"
-        onIonChange={(e) => form.setFieldValue(field.name, e.detail.value)}
-        {...props}
-      />
-    </IonItem>
-  </>
+  <IonItem>
+    <IonCheckbox
+      slot="start"
+      mode="ios"
+      onIonChange={(e) => form.setFieldValue(field.name, e.detail.value)}
+      {...props}
+    />
+    <IonLabel>{props.label}</IonLabel>
+  </IonItem>
 );
 
 const Tab2: React.FC = () => {
@@ -204,7 +201,11 @@ const Tab2: React.FC = () => {
           </IonToolbar>
         </IonHeader>
         <Formik
-          initialValues={{ aliasName: "", accountType: "", randomize: false }}
+          initialValues={{
+            aliasName: "",
+            accountType: "accounts",
+            randomize: false,
+          }}
           onSubmit={async (values) => {
             console.log(values);
             try {
@@ -278,34 +279,48 @@ const Tab2: React.FC = () => {
                   component={IonRadioWrapper}
                 />
 
+                <IonListHeader lines="full">
+                  <IonLabel>Options</IonLabel>
+                </IonListHeader>
+
                 <Field
                   name="randomize"
                   label="Create Randomized/Unique Email"
                   component={IonCheckboxWrapper}
                 />
 
-                <IonItem>
-                  <IonLabel>
-                    Alias Name:{" "}
-                    {generateGroupName(
-                      values.aliasName,
-                      values.accountType,
-                      values.randomize
-                    )}
-                  </IonLabel>
-                </IonItem>
-                <IonItem>
-                  <IonLabel>
-                    Email:{" "}
-                    {generateEmail(
-                      values.aliasName,
-                      values.accountType,
-                      values.randomize
-                    )}
-                  </IonLabel>
-                </IonItem>
+                <IonListHeader lines="full">
+                  <IonLabel>Summary</IonLabel>
+                </IonListHeader>
 
-                <IonButton type="submit">Submit</IonButton>
+                {values.aliasName !== "" && (
+                  <>
+                    <IonItem>
+                      <IonLabel>
+                        Alias Name:{" "}
+                        {generateGroupName(
+                          values.aliasName,
+                          values.accountType,
+                          values.randomize
+                        )}
+                      </IonLabel>
+                    </IonItem>
+                    <IonItem>
+                      <IonLabel>
+                        Email:{" "}
+                        {generateEmail(
+                          values.aliasName,
+                          values.accountType,
+                          values.randomize
+                        )}
+                      </IonLabel>
+                    </IonItem>
+                  </>
+                )}
+
+                <IonItem>
+                  <IonButton type="submit">Submit</IonButton>
+                </IonItem>
               </IonList>
             </form>
           )}
