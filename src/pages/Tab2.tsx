@@ -289,12 +289,12 @@ const Tab2: React.FC = () => {
                   component={IonCheckboxWrapper}
                 />
 
-                <IonListHeader lines="full">
-                  <IonLabel>Summary</IonLabel>
-                </IonListHeader>
-
                 {values.aliasName !== "" && (
                   <>
+                    <IonListHeader lines="full">
+                      <IonLabel>Summary</IonLabel>
+                    </IonListHeader>
+
                     <IonItem>
                       <IonLabel>
                         Alias Name:{" "}
