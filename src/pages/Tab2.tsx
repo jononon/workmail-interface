@@ -1,10 +1,10 @@
 import {
   IonButton,
+  IonCheckbox,
   IonContent,
   IonHeader,
   IonInput,
   IonItem,
-  IonItemDivider,
   IonLabel,
   IonList,
   IonListHeader,
@@ -15,48 +15,15 @@ import {
   IonToolbar,
   useIonToast,
 } from "@ionic/react";
-import ExploreContainer from "../components/ExploreContainer";
 import "./Tab2.css";
 import { Field, FieldProps, Formik } from "formik";
 import { API } from "aws-amplify";
+import { useState } from "react";
 
 /*
 Alias Name
 Type: Account, Orders, Other
 */
-
-const generateEmail = (aliasName: string, accountType: string) => {
-  if (aliasName === "") {
-    return "";
-  } else if (accountType === "none") {
-    return `${aliasName.toLowerCase()}@jonathandamico.me`;
-  } else {
-    return `${aliasName.toLowerCase()}.${accountType.toLowerCase()}@jonathandamico.me`;
-  }
-};
-
-const uppercaseAccountType = (accountType: string) => {
-  switch (accountType) {
-    case "accounts":
-      return "Accounts";
-    case "orders":
-      return "Orders";
-    case "mailinglist":
-      return "MailingList";
-    default:
-      return "";
-  }
-};
-
-const generateGroupName = (aliasName: string, accountType: string) => {
-  if (aliasName === "") {
-    return "";
-  } else if (accountType === "none") {
-    return aliasName;
-  } else {
-    return `${uppercaseAccountType(accountType)}-${aliasName}`;
-  }
-};
 
 const IonInputWrapper = ({
   field,
@@ -111,8 +78,102 @@ const IonRadioWrapper = ({
   </IonRadioGroup>
 );
 
+const IonCheckboxWrapper = ({
+  field,
+  form,
+  ...props
+}: FieldProps & { label: string }) => (
+  <>
+    <IonListHeader>
+      <IonLabel>{props.label}</IonLabel>
+    </IonListHeader>
+    <IonItem>
+      <IonCheckbox
+        mode="ios"
+        onIonChange={(e) => form.setFieldValue(field.name, e.detail.value)}
+        {...props}
+      />
+    </IonItem>
+  </>
+);
+
 const Tab2: React.FC = () => {
   const [presentToast, dismissToast] = useIonToast();
+
+  const generateRandomId = () => {
+    const characters = "abcdefghijklmnopqrstuvwxyz";
+    let result = "";
+    for (let i = 0; i < 5; i++) {
+      result += characters.charAt(
+        Math.floor(Math.random() * characters.length)
+      );
+    }
+
+    return result;
+  };
+
+  const [randomId, setRandomId] = useState<string>(generateRandomId());
+
+  const generateEmail = (
+    aliasName: string,
+    accountType: string,
+    randomize: boolean
+  ) => {
+    if (aliasName === "") {
+      return "";
+    }
+
+    let email = aliasName;
+
+    if (accountType !== "none") {
+      email += `.${accountType}`;
+    }
+
+    if (randomize) {
+      email += `.${randomId}`;
+    }
+
+    email += "@jonathandamico.me";
+
+    return email.toLowerCase().replace(/\s+/g, "");
+  };
+
+  const uppercaseAccountType = (accountType: string) => {
+    switch (accountType) {
+      case "accounts":
+        return "Accounts";
+      case "orders":
+        return "Orders";
+      case "mailinglist":
+        return "MailingList";
+      default:
+        return "";
+    }
+  };
+
+  const generateGroupName = (
+    aliasName: string,
+    accountType: string,
+    randomize: boolean
+  ) => {
+    if (aliasName === "") {
+      return "";
+    }
+
+    let groupName = "";
+
+    if (accountType !== "none") {
+      groupName += `${uppercaseAccountType(accountType)}-`;
+    }
+
+    groupName += aliasName;
+
+    if (randomize) {
+      groupName += `-${randomId}`;
+    }
+
+    return groupName.replace(/\s+/g, "");
+  };
 
   const presentResponseToast = (message: string, isError: boolean) => {
     dismissToast();
@@ -143,7 +204,7 @@ const Tab2: React.FC = () => {
           </IonToolbar>
         </IonHeader>
         <Formik
-          initialValues={{ aliasName: "", accountType: "" }}
+          initialValues={{ aliasName: "", accountType: "", randomize: false }}
           onSubmit={async (values) => {
             console.log(values);
             try {
@@ -154,21 +215,31 @@ const Tab2: React.FC = () => {
                   body: {
                     aliasName: generateGroupName(
                       values.aliasName,
-                      values.accountType
+                      values.accountType,
+                      values.randomize
                     ),
-                    email: generateEmail(values.aliasName, values.accountType),
+                    email: generateEmail(
+                      values.aliasName,
+                      values.accountType,
+                      values.randomize
+                    ),
                   },
                 }
               );
 
               if (response.error === undefined) {
                 navigator.clipboard.writeText(
-                  generateEmail(values.aliasName, values.accountType)
+                  generateEmail(
+                    values.aliasName,
+                    values.accountType,
+                    values.randomize
+                  )
                 );
                 presentResponseToast(
                   "Alias Created Successfully, Copied To Clipboard",
                   false
                 );
+                setRandomId(generateRandomId());
               } else {
                 presentResponseToast(response.error.message, true);
               }
@@ -207,15 +278,30 @@ const Tab2: React.FC = () => {
                   component={IonRadioWrapper}
                 />
 
+                <Field
+                  name="randomize"
+                  label="Create Randomized/Unique Email"
+                  component={IonCheckboxWrapper}
+                />
+
                 <IonItem>
                   <IonLabel>
                     Alias Name:{" "}
-                    {generateGroupName(values.aliasName, values.accountType)}
+                    {generateGroupName(
+                      values.aliasName,
+                      values.accountType,
+                      values.randomize
+                    )}
                   </IonLabel>
                 </IonItem>
                 <IonItem>
                   <IonLabel>
-                    Email: {generateEmail(values.aliasName, values.accountType)}
+                    Email:{" "}
+                    {generateEmail(
+                      values.aliasName,
+                      values.accountType,
+                      values.randomize
+                    )}
                   </IonLabel>
                 </IonItem>
 
