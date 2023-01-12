@@ -159,7 +159,7 @@ const Tab2: React.FC = () => {
 
     let groupName = "";
 
-    if (accountType !== "none") {
+    if (accountType !== "none" && accountType !== "") {
       groupName += `${uppercaseAccountType(accountType)}-`;
     }
 
@@ -203,7 +203,7 @@ const Tab2: React.FC = () => {
         <Formik
           initialValues={{
             aliasName: "",
-            accountType: "accounts",
+            accountType: "",
             randomize: false,
           }}
           onSubmit={async (values) => {
