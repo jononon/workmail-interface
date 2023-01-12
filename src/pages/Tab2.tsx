@@ -87,7 +87,11 @@ const IonCheckboxWrapper = ({
     <IonCheckbox
       slot="start"
       mode="ios"
-      onIonChange={(e) => form.setFieldValue(field.name, e.detail.value)}
+      onIonChange={(e) => {
+        console.log(e);
+        console.log(e.detail.value);
+        form.setFieldValue(field.name, e.detail.value);
+      }}
       {...props}
     />
     <IonLabel>{props.label}</IonLabel>
@@ -319,7 +323,9 @@ const Tab2: React.FC = () => {
                 )}
 
                 <IonItem>
-                  <IonButton type="submit">Submit</IonButton>
+                  <IonButton type="submit" size="default">
+                    Submit
+                  </IonButton>
                 </IonItem>
               </IonList>
             </form>
